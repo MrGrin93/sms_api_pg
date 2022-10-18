@@ -1,0 +1,8 @@
+asyncpg==0.26.0
+alembic==1.8.1
+fastapi==0.78.0
+fastapi-login==1.8.2
+Jinja2==3.0.1
+sqlmodel==0.0.6
+uvicorn==0.17.6
+python-multipart

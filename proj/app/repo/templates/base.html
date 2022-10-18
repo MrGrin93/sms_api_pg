@@ -1,0 +1,18 @@
+<html>
+
+  <head itemscope="" itemtype="http://schema.org/WebSite">
+      {% if title %}
+      <title>{{title}} - sms</title>
+      {% else %}
+      <title>SMS</title>
+      {% endif %}
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+      <meta name="viewport" content="width=device-width">
+      <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"> 
+      <link rel="stylesheet" href="{{ url_for('static', path='/index.css') }}">
+  </head>
+  <body>
+    {% block content %}{% endblock %}
+  </body>
+</html>

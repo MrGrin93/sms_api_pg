@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:11
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=smsapiuser
+      - POSTGRES_PASSWORD=smsapipassword
+      - POSTGRES_DB=smsapi
+  web:
+    build: ./proj
+    command: bash -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+    volumes:
+      - ./proj:/usr/src/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://smsapiuser:smsapipassword@db:5432/smsapi
+    depends_on:
+      - db
