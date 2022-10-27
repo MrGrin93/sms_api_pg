@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-import uvicorn, os
+import os
 
 from app.db.db import *
 from app.models.models import *
@@ -28,10 +28,6 @@ async def create_admin_user():
         result_user = await one_session.execute(select(Users).filter(Users.username == "admin"))
         user = result_user.scalars().all()
         if not user:
-            admin_usr = Users(username="admin", password="admin")
+            admin_usr = Users(username="admin", password="password")
             one_session.add(admin_usr)
             await one_session.commit()
-
-
-# if __name__ == "__main__":
-#     uvicorn.run(app, port=8000)
