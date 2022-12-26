@@ -20,7 +20,10 @@ from .config import SECRET
 #         )
 #     return credentials.username
 
-manager = LoginManager(SECRET,"/auth/login",use_cookie=True)
+class NotAuthenticatedException(Exception):
+    pass
+
+manager = LoginManager(SECRET,"/auth/login",use_cookie=True, custom_exception=NotAuthenticatedException)
 # manager.cookie_name = "some-name"
 
 router = APIRouter()
@@ -29,8 +32,11 @@ router = APIRouter()
 async def load_user(username:str):
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session() as one_session:
-        result_user = await one_session.execute(select(Users).where(Users.username == username))
-        user = result_user.scalars().one()
+        try:
+            result_user = await one_session.execute(select(Users).where(Users.username == username))
+            user = result_user.scalars().one()
+        except:
+            raise NotAuthenticatedException
     return user
 
 @router.post("/login")
@@ -44,7 +50,7 @@ async def login(data: OAuth2PasswordRequestForm = Depends()):
         raise InvalidCredentialsException
     elif password != user.password:
         print("Password not correct")
-        raise InvalidCredentialsException
+        raise NotAuthenticatedException
     print("User correct")
     access_token = manager.create_access_token(
         data=dict(sub=user.username)

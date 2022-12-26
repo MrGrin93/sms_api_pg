@@ -76,3 +76,7 @@ async def get_webpage(request: Request, ul: str, session: AsyncSession = Depends
 @router.get("/",response_class=HTMLResponse)
 def loginwithCreds(request:Request):
     return templates.TemplateResponse("auth.html", {"request": request})
+
+@router.post("/",response_class=HTMLResponse)
+def loginwithCreds(request:Request):
+    return templates.TemplateResponse("auth.html", {"request": request})

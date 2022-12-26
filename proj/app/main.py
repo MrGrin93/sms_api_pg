@@ -1,6 +1,8 @@
 from typing import List
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi_login.exceptions import InvalidCredentialsException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 import os
@@ -31,3 +33,11 @@ async def create_admin_user():
             admin_usr = Users(username="admin", password="password")
             one_session.add(admin_usr)
             await one_session.commit()
+
+
+@app.exception_handler(security.NotAuthenticatedException)
+def auth_exception_handler(request: Request, exc: security.NotAuthenticatedException):
+    """
+    Redirect the user to the login page if not logged in
+    """
+    return RedirectResponse(url='/')
